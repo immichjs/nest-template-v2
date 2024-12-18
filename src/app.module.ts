@@ -1,6 +1,7 @@
 import { databaseConfig } from '@config/database.config';
 import { jwtConfig } from '@config/jwt.config';
 import { redisConfig } from '@config/redis.config';
+import { s3Config } from '@config/s3.config';
 import { RedisCacheModule } from '@core/redis-cache/redis-cache.module';
 import { RevokedTokensModule } from '@core/revoked-tokens/revoked-tokens.module';
 import { DatabaseModule } from '@infra/database/database.module';
@@ -16,7 +17,7 @@ import { UsersModule } from './core/users/users.module';
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [databaseConfig, jwtConfig, redisConfig],
+			load: [databaseConfig, jwtConfig, redisConfig, s3Config],
 		}),
 		CacheModule.registerAsync({
 			isGlobal: true,
