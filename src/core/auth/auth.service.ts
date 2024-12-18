@@ -1,5 +1,6 @@
 import { ConflictUserException } from '@common/exceptions/conflict-user.exceptions';
 import { IncorrectCredentialsException } from '@common/exceptions/incorrect-credentials.exception';
+import { InvalidTokenException } from '@common/exceptions/invalid-token.exception';
 import { UserNotFoundException } from '@common/exceptions/user-not-found.exception';
 import { RevokedTokensService } from '@core/revoked-tokens/revoked-tokens.service';
 import { UsersService } from '@core/users/users.service';
@@ -52,6 +53,23 @@ export class AuthService {
 
 	public async logout(token: string): Promise<void> {
 		return this.revokedTokensService.revokeToken(token);
+	}
+
+	public async refresh(refreshToken: string): Promise<IJWTAccessData> {
+		try {
+			const decoded = this.jwtService.verify(refreshToken, {
+				issuer: 'refresh',
+			});
+			const user = await this.usersService.findOne({ id: decoded.id });
+
+			if (!user) {
+				throw new UserNotFoundException();
+			}
+
+			return this.generateTokens(user);
+		} catch (error) {
+			throw new InvalidTokenException();
+		}
 	}
 
 	private generateTokens(user: User): IJWTAccessData {

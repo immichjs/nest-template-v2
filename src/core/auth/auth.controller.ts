@@ -33,4 +33,11 @@ export class AuthController {
 	public async logout(@Headers('authorization') token: string): Promise<void> {
 		return this.authService.logout(token);
 	}
+
+	@Post('refresh')
+	public async refresh(
+		@Body('refreshToken') refreshToken: string,
+	): Promise<IJWTAccessData> {
+		return this.authService.refresh(refreshToken);
+	}
 }
