@@ -17,6 +17,7 @@ import { NotificationModule } from './core/notification/notification.module';
 import { OtpModule } from './core/otp/otp.module';
 import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
+import { CronModule } from './jobs/cron/cron.module';
 
 @Module({
 	imports: [
@@ -45,6 +46,7 @@ import { UsersModule } from './core/users/users.module';
 		NotificationModule,
 		OtpModule,
 		SharedModule,
+		CronModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

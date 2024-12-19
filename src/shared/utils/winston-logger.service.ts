@@ -27,23 +27,23 @@ export class WinstonLoggerService implements LoggerService {
 		});
 	}
 
-	log(message: string) {
+	public log(message: string) {
 		this.logger.info(message);
 	}
 
-	error(message: string, trace: string) {
+	public error(message: string, trace: string) {
 		this.logger.error(message, { trace });
 	}
 
-	warn(message: string) {
+	public warn(message: string) {
 		this.logger.warn(message);
 	}
 
-	debug(message: string) {
+	public debug(message: string) {
 		this.logger.debug(message);
 	}
 
-	verbose(message: string) {
+	public verbose(message: string) {
 		this.logger.verbose(message);
 	}
 }
