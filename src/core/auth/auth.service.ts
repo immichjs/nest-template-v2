@@ -2,10 +2,11 @@ import { ConflictUserException } from '@common/exceptions/conflict-user.exceptio
 import { IncorrectCredentialsException } from '@common/exceptions/incorrect-credentials.exception';
 import { InvalidTokenException } from '@common/exceptions/invalid-token.exception';
 import { UserNotFoundException } from '@common/exceptions/user-not-found.exception';
+import { NotificationService } from '@core/notification/notification.service';
 import { RevokedTokensService } from '@core/revoked-tokens/revoked-tokens.service';
 import { UsersService } from '@core/users/users.service';
-import { LoginUserDTO } from '@domain/dtos/auth/login-user.dto';
-import { RegisterUserDTO } from '@domain/dtos/auth/register-user.dto';
+import { LoginUserDTO } from '@domain/dtos/login-user.dto';
+import { RegisterUserDTO } from '@domain/dtos/register-user.dto';
 import { User } from '@domain/entities/user';
 import { IJWTAccessData } from '@domain/interfaces/jwt-access-data.interface';
 import { IJWTPayload } from '@domain/interfaces/jwt-payload.interface';
@@ -18,6 +19,7 @@ export class AuthService {
 	@Inject() private readonly usersService: UsersService;
 	@Inject() private readonly jwtService: JwtService;
 	@Inject() private readonly revokedTokensService: RevokedTokensService;
+	@Inject() private readonly notificationService: NotificationService;
 
 	public async register(data: RegisterUserDTO): Promise<IJWTAccessData> {
 		const userAlreadyExists = await this.usersService.findOne({
@@ -47,6 +49,10 @@ export class AuthService {
 		if (comparedHashIsNotValid) {
 			throw new IncorrectCredentialsException();
 		}
+
+		await this.notificationService.create({
+			description: `${user.name}(${user.email}) logou no sistema.`,
+		});
 
 		return this.generateTokens(user);
 	}

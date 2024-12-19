@@ -1,3 +1,4 @@
+import { NotificationModule } from '@core/notification/notification.module';
 import { RevokedTokensModule } from '@core/revoked-tokens/revoked-tokens.module';
 import { UsersModule } from '@core/users/users.module';
 import { Module } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { AuthService } from './auth.service';
 		}),
 		UsersModule,
 		RevokedTokensModule,
+		NotificationModule,
 	],
 	controllers: [AuthController],
 	providers: [AuthService],

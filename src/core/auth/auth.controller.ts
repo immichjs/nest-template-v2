@@ -1,6 +1,6 @@
 import { JwtGuard } from '@common/guards/jwt.guard';
-import { LoginUserDTO } from '@domain/dtos/auth/login-user.dto';
-import { RegisterUserDTO } from '@domain/dtos/auth/register-user.dto';
+import { LoginUserDTO } from '@domain/dtos/login-user.dto';
+import { RegisterUserDTO } from '@domain/dtos/register-user.dto';
 import { IJWTAccessData } from '@domain/interfaces/jwt-access-data.interface';
 import {
 	Body,

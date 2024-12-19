@@ -9,7 +9,10 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AuthModule } from './core/auth/auth.module';
+import { NotificationModule } from './core/notification/notification.module';
 import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
 
@@ -37,8 +40,9 @@ import { UsersModule } from './core/users/users.module';
 		AuthModule,
 		RevokedTokensModule,
 		UploadModule,
+		NotificationModule,
 	],
-	controllers: [],
-	providers: [],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}

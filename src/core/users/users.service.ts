@@ -1,5 +1,5 @@
 import { UsersRepositoryContract } from '@domain/contracts/users.repository.contract';
-import { CreateUserDTO } from '@domain/dtos/users/create-user.dto';
+import { CreateUserDTO } from '@domain/dtos/create-user.dto';
 import { User } from '@domain/entities/user';
 import { Inject, Injectable } from '@nestjs/common';
 
