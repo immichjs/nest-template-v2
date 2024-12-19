@@ -15,6 +15,7 @@ import { AuthModule } from './core/auth/auth.module';
 import { NotificationModule } from './core/notification/notification.module';
 import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
+import { OtpModule } from './core/otp/otp.module';
 
 @Module({
 	imports: [
@@ -41,6 +42,7 @@ import { UsersModule } from './core/users/users.module';
 		RevokedTokensModule,
 		UploadModule,
 		NotificationModule,
+		OtpModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
