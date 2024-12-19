@@ -1,6 +1,5 @@
-import { JwtGuard } from '@common/guards/jwt.guard';
-import { LoginUserDTO } from '@domain/dtos/login-user.dto';
-import { RegisterUserDTO } from '@domain/dtos/register-user.dto';
+import { LoginUserDto } from '@domain/dtos/login-user.dto';
+import { RegisterUserDto } from '@domain/dtos/register-user.dto';
 import { IJWTAccessData } from '@domain/interfaces/jwt-access-data.interface';
 import {
 	Body,
@@ -10,21 +9,24 @@ import {
 	Post,
 	UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { JwtGuard } from '@shared/guards/jwt.guard';
 import { AuthService } from './auth.service';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
 	@Inject() private readonly authService: AuthService;
 
 	@Post('register')
 	public async register(
-		@Body() data: RegisterUserDTO,
+		@Body() data: RegisterUserDto,
 	): Promise<IJWTAccessData> {
 		return this.authService.register(data);
 	}
 
 	@Post('login')
-	public async login(@Body() data: LoginUserDTO): Promise<IJWTAccessData> {
+	public async login(@Body() data: LoginUserDto): Promise<IJWTAccessData> {
 		return this.authService.login(data);
 	}
 

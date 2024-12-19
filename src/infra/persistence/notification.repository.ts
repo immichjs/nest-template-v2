@@ -1,5 +1,5 @@
 import { NotificationRepositoryContract } from '@domain/contracts/notification.repository.contract';
-import { CreateNotificationDTO } from '@domain/dtos/create-notification.dto';
+import { CreateNotificationDto } from '@domain/dtos/create-notification.dto';
 import { Notification } from '@domain/entities/notification';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,7 +8,7 @@ export class NotificationRepository extends NotificationRepositoryContract {
 	@InjectRepository(Notification)
 	private readonly notificationRepository: Repository<Notification>;
 
-	public async create(data: CreateNotificationDTO): Promise<Notification> {
+	public async create(data: CreateNotificationDto): Promise<Notification> {
 		const notification = this.notificationRepository.create(data);
 
 		return this.notificationRepository.save(notification);

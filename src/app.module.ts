@@ -8,14 +8,15 @@ import { DatabaseModule } from '@infra/database/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { SharedModule } from '@shared/shared.module';
 import * as redisStore from 'cache-manager-redis-store';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './core/auth/auth.module';
 import { NotificationModule } from './core/notification/notification.module';
+import { OtpModule } from './core/otp/otp.module';
 import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
-import { OtpModule } from './core/otp/otp.module';
 
 @Module({
 	imports: [
@@ -43,6 +44,7 @@ import { OtpModule } from './core/otp/otp.module';
 		UploadModule,
 		NotificationModule,
 		OtpModule,
+		SharedModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

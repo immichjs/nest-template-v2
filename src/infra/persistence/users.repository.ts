@@ -1,16 +1,16 @@
-import { ConflictUserException } from '@common/exceptions/conflict-user.exceptions';
-import { UserNotFoundException } from '@common/exceptions/user-not-found.exception';
 import { UsersRepositoryContract } from '@domain/contracts/users.repository.contract';
-import { CreateUserDTO } from '@domain/dtos/create-user.dto';
-import { UpdateUserDTO } from '@domain/dtos/update-user.dto';
+import { CreateUserDto } from '@domain/dtos/create-user.dto';
+import { UpdateUserDto } from '@domain/dtos/update-user.dto';
 import { User } from '@domain/entities/user';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ConflictUserException } from '@shared/exceptions/conflict-user.exceptions';
+import { UserNotFoundException } from '@shared/exceptions/user-not-found.exception';
 import { Not, Repository } from 'typeorm';
 
 export class UsersRepository extends UsersRepositoryContract {
 	@InjectRepository(User) private readonly usersRepository: Repository<User>;
 
-	public async create(data: CreateUserDTO): Promise<User> {
+	public async create(data: CreateUserDto): Promise<User> {
 		const user = this.usersRepository.create(data);
 
 		return this.usersRepository.save(user);
@@ -32,7 +32,7 @@ export class UsersRepository extends UsersRepositoryContract {
 		return user;
 	}
 
-	public async update(id: string, data: UpdateUserDTO): Promise<User> {
+	public async update(id: string, data: UpdateUserDto): Promise<User> {
 		const user = await this.usersRepository.findOne({
 			where: {
 				id,

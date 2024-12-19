@@ -1,5 +1,5 @@
 import { UsersRepositoryContract } from '@domain/contracts/users.repository.contract';
-import { CreateUserDTO } from '@domain/dtos/create-user.dto';
+import { CreateUserDto } from '@domain/dtos/create-user.dto';
 import { User } from '@domain/entities/user';
 import { Inject, Injectable } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ export class UsersService {
 	@Inject(UsersRepositoryContract)
 	private readonly usersRepository: UsersRepositoryContract;
 
-	public async create(data: CreateUserDTO): Promise<User> {
+	public async create(data: CreateUserDto): Promise<User> {
 		const salt = await bcrypt.genSalt(10);
 		const hashedPassword = await bcrypt.hash(data.password, salt);
 		return this.usersRepository.create({ ...data, password: hashedPassword });
