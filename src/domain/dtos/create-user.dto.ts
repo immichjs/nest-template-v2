@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Match } from '@shared/decorators/match.decorator';
 import { IsEmail, IsNotEmpty, MaxLength, MinLength } from 'class-validator';
 
 export class CreateUserDto {
@@ -28,4 +29,13 @@ export class CreateUserDto {
 	@MinLength(4)
 	@MaxLength(16)
 	password: string;
+
+	@ApiProperty({
+		description: 'Confirme a senha do usuário',
+		type: String,
+		required: true,
+	})
+	@IsNotEmpty()
+	@Match('password')
+	confirmPassword: string;
 }

@@ -11,9 +11,8 @@ export class UsersService {
 	private readonly usersRepository: UsersRepositoryContract;
 
 	public async create(data: CreateUserDto): Promise<User> {
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(data.password, salt);
-		return this.usersRepository.create({ ...data, password: hashedPassword });
+		Object.assign(data, { password: await this.hashPassword(data.password) });
+		return this.usersRepository.create(data);
 	}
 
 	public async findOne(
@@ -21,5 +20,18 @@ export class UsersService {
 	): Promise<User> {
 		const user = await this.usersRepository.findOne(filters);
 		return user;
+	}
+
+	public async update(id: string, data: Partial<User>): Promise<User> {
+		if (data.password) {
+			Object.assign(data, { password: await this.hashPassword(data.password) });
+		}
+		return this.usersRepository.update(id, data);
+	}
+
+	private async hashPassword(password: string): Promise<string> {
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+		return hashedPassword;
 	}
 }

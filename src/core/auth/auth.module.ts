@@ -1,4 +1,5 @@
 import { NotificationModule } from '@core/notification/notification.module';
+import { OtpModule } from '@core/otp/otp.module';
 import { RevokedTokensModule } from '@core/revoked-tokens/revoked-tokens.module';
 import { UsersModule } from '@core/users/users.module';
 import { Module } from '@nestjs/common';
@@ -7,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { SharedModule } from '@shared/shared.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
 	imports: [
@@ -22,11 +24,12 @@ import { AuthService } from './auth.service';
 			}),
 		}),
 		SharedModule,
+		OtpModule,
 		UsersModule,
 		RevokedTokensModule,
 		NotificationModule,
 	],
 	controllers: [AuthController],
-	providers: [AuthService],
+	providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

@@ -1,16 +1,16 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: boilerplate_postgres
+    container_name: nest_template_postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: boilerplate
+      POSTGRES_DB: nest_template
     ports:
       - '5432:5432'
 
   redis:
     image: redis:latest
-    container_name: boilerplate_redis
+    container_name: nest_template_redis
     ports:
       - '6379:6379'
