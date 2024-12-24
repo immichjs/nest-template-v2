@@ -6,10 +6,11 @@ import * as crypto from 'crypto';
 export class OtpService {
 	@Inject() private readonly redisService: RedisService;
 
-	public async saveOTP(key: string): Promise<void> {
+	public async saveOTP(key: string): Promise<string> {
 		const otp = this.generateOTP(3);
 		const ttl = 300 * 1000;
 		await this.redisService.set(key, otp, ttl);
+		return otp;
 	}
 
 	public async validate(key: string, value: string): Promise<boolean> {

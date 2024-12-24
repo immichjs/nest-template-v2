@@ -17,6 +17,8 @@ import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
 import { CronModule } from './jobs/cron/cron.module';
 import { RedisModule } from '@core/redis/redis.module';
+import { MailModule } from './core/mail/mail.module';
+import { JobsModule } from './jobs/jobs.module';
 
 @Module({
 	imports: [
@@ -34,6 +36,8 @@ import { RedisModule } from '@core/redis/redis.module';
 		OtpModule,
 		SharedModule,
 		CronModule,
+		MailModule,
+		JobsModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

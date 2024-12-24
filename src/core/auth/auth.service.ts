@@ -21,6 +21,8 @@ import { InvalidTokenException } from '@shared/exceptions/invalid-token.exceptio
 import { UserNotFoundException } from '@shared/exceptions/user-not-found.exception';
 import { WinstonLoggerService } from '@shared/utils/winston-logger.service';
 import * as bcrypt from 'bcrypt';
+import { Job } from 'bullmq';
+import { MailerQueueService } from 'src/jobs/queues/services/mailer.queue.service';
 
 @Injectable()
 export class AuthService {
@@ -30,6 +32,7 @@ export class AuthService {
 	@Inject() private readonly notificationService: NotificationService;
 	@Inject() private readonly otpService: OtpService;
 	@Inject() private readonly logger: WinstonLoggerService;
+	@Inject() private readonly mailerQueueService: MailerQueueService;
 
 	public async register(data: RegisterUserDto): Promise<IJWTAccessData> {
 		const userAlreadyExists = await this.usersService.findOne({
@@ -89,7 +92,15 @@ export class AuthService {
 
 		if (user) {
 			const key = `reset:${user.id}`;
-			await this.otpService.saveOTP(key);
+			const otp = await this.otpService.saveOTP(key);
+
+			await this.mailerQueueService.execute({
+				context: {
+					name: user.name,
+					email: user.email,
+					otp,
+				},
+			});
 		}
 
 		return {

@@ -9,6 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { JobsModule } from 'src/jobs/jobs.module';
 
 @Module({
 	imports: [
@@ -28,6 +29,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 		UsersModule,
 		RevokedTokensModule,
 		NotificationModule,
+		JobsModule,
 	],
 	controllers: [AuthController],
 	providers: [AuthService, JwtStrategy],
