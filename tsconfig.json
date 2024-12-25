@@ -24,7 +24,8 @@
 			"@domain/*": ["src/domain/*"],
 			"@infra/*": ["src/infra/*"],
 			"@presentation/*": ["src/presentation/*"],
-			"@events/*": ["src/events/*"]
+			"@events/*": ["src/events/*"],
+			"@jobs/*": ["src/jobs/*"]
 		}
 	}
 }

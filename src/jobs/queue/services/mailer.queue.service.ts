@@ -1,7 +1,7 @@
 import { ISendMailOptions } from '@nestjs-modules/mailer';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
-import { Job, Queue } from 'bullmq';
+import { Queue } from 'bullmq';
 import { QueueConfig } from '../queue.config';
 
 @Injectable()
@@ -10,7 +10,7 @@ export class MailerQueueService {
 		@InjectQueue(QueueConfig.MAILER) private readonly mailerQueue: Queue,
 	) {}
 
-	public async execute(data: any) {
+	public async execute(data: ISendMailOptions) {
 		await this.mailerQueue.add(QueueConfig.MAILER, data);
 	}
 }

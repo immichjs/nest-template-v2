@@ -35,7 +35,6 @@ import { JobsModule } from './jobs/jobs.module';
 		NotificationModule,
 		OtpModule,
 		SharedModule,
-		CronModule,
 		MailModule,
 		JobsModule,
 	],

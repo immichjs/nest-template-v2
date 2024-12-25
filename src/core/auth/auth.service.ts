@@ -12,6 +12,7 @@ import { IJWTAccessData } from '@domain/interfaces/jwt-access-data.interface';
 import { IJWTPayload } from '@domain/interfaces/jwt-payload.interface';
 import { IJwtResetData } from '@domain/interfaces/jwt-reset-data.interface';
 import { IResetResponse } from '@domain/interfaces/reset-response.interface';
+import { MailerQueueService } from '@jobs/queue/services/mailer.queue.service';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConflictUserException } from '@shared/exceptions/conflict-user.exceptions';
@@ -21,8 +22,6 @@ import { InvalidTokenException } from '@shared/exceptions/invalid-token.exceptio
 import { UserNotFoundException } from '@shared/exceptions/user-not-found.exception';
 import { WinstonLoggerService } from '@shared/utils/winston-logger.service';
 import * as bcrypt from 'bcrypt';
-import { Job } from 'bullmq';
-import { MailerQueueService } from 'src/jobs/queues/services/mailer.queue.service';
 
 @Injectable()
 export class AuthService {
