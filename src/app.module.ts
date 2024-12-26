@@ -3,9 +3,8 @@ import { jwtConfig } from '@config/jwt.config';
 import { redisConfig } from '@config/redis.config';
 import { s3Config } from '@config/s3.config';
 import { DatabaseModule } from '@infra/database/database.module';
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { SharedModule } from '@shared/shared.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,16 +13,16 @@ import { NotificationModule } from './core/notification/notification.module';
 import { OtpModule } from './core/otp/otp.module';
 import { UploadModule } from './core/upload/upload.module';
 import { UsersModule } from './core/users/users.module';
-import { CronModule } from './jobs/cron/cron.module';
 import { RedisModule } from '@core/redis/redis.module';
 import { MailModule } from './core/mail/mail.module';
 import { JobsModule } from './jobs/jobs.module';
+import { mailConfig } from '@config/mail.config';
 
 @Module({
 	imports: [
 		ConfigModule.forRoot({
 			isGlobal: true,
-			load: [databaseConfig, jwtConfig, redisConfig, s3Config],
+			load: [databaseConfig, jwtConfig, redisConfig, s3Config, mailConfig],
 		}),
 		DatabaseModule,
 		RedisModule,
