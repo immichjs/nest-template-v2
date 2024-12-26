@@ -1,6 +1,6 @@
 import { NotificationService } from '@core/notification/notification.service';
 import { OtpService } from '@core/otp/otp.service';
-import { RevokedTokensService } from '@core/revoked-tokens/revoked-tokens.service';
+import { RedisService } from '@core/redis/redis.service';
 import { UsersService } from '@core/users/users.service';
 import { ChangePasswordDto } from '@domain/dtos/change-password.dto';
 import { LoginUserDto } from '@domain/dtos/login-user.dto';
@@ -27,7 +27,7 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
 	@Inject() private readonly usersService: UsersService;
 	@Inject() private readonly jwtService: JwtService;
-	@Inject() private readonly revokedTokensService: RevokedTokensService;
+	@Inject() private readonly redisService: RedisService;
 	@Inject() private readonly notificationService: NotificationService;
 	@Inject() private readonly otpService: OtpService;
 	@Inject() private readonly logger: WinstonLoggerService;
@@ -65,8 +65,14 @@ export class AuthService {
 		return this.generateTokens(user);
 	}
 
-	public async logout(token: string): Promise<void> {
-		return this.revokedTokensService.revokeToken(token);
+	public async logout(
+		accessToken: string,
+		refreshToken: string,
+	): Promise<void> {
+		await Promise.all([
+			this.revokeToken(accessToken),
+			this.revokeToken(refreshToken),
+		]);
 	}
 
 	public async refresh(refreshToken: string): Promise<IJWTAccessData> {
@@ -145,7 +151,8 @@ export class AuthService {
 				password: data.password,
 			});
 
-			await this.revokedTokensService.revokeToken(resetToken);
+			// await this.revokedTokensService.revokeToken(resetToken);
+			await this.revokeToken(resetToken);
 
 			return this.generateTokens(updatedUser);
 		} catch (error) {
@@ -165,6 +172,27 @@ export class AuthService {
 		});
 
 		return { resetToken };
+	}
+
+	public async revokeToken(token: string): Promise<void> {
+		const decoded = this.jwtService.decode(token);
+
+		if (!decoded || !decoded.exp) {
+			throw new Error('Token inválido ou malformado');
+		}
+
+		const ttl = decoded.exp * 1000 - Date.now();
+
+		if (ttl > 0) {
+			await this.redisService.set(token, 'revoked', ttl);
+		} else {
+			throw new Error('Token expirado');
+		}
+	}
+
+	public async isTokenRevoked(token: string): Promise<boolean> {
+		const result = await this.redisService.get(token);
+		return result === 'revoked';
 	}
 
 	private generateTokens(user: User): IJWTAccessData {

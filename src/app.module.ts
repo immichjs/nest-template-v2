@@ -2,7 +2,6 @@ import { databaseConfig } from '@config/database.config';
 import { jwtConfig } from '@config/jwt.config';
 import { redisConfig } from '@config/redis.config';
 import { s3Config } from '@config/s3.config';
-import { RevokedTokensModule } from '@core/revoked-tokens/revoked-tokens.module';
 import { DatabaseModule } from '@infra/database/database.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
@@ -30,7 +29,6 @@ import { JobsModule } from './jobs/jobs.module';
 		RedisModule,
 		UsersModule,
 		AuthModule,
-		RevokedTokensModule,
 		UploadModule,
 		NotificationModule,
 		OtpModule,

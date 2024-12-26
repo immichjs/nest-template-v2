@@ -70,13 +70,24 @@ export class AuthController {
 	@Post('logout')
 	public async logout(
 		@Headers('authorization') authorization: string,
-	): Promise<void> {
+		@Req() request: Request,
+		@Res() response: Response,
+	): Promise<Response<void>> {
 		const accessToken = authorization.split(' ')[1];
-		return this.authService.logout(accessToken);
+		const refreshToken = request.cookies['refreshToken'];
+
+		if (!refreshToken) {
+			throw new InvalidTokenException();
+		}
+
+		await this.authService.logout(accessToken, refreshToken);
+
+		response.clearCookie('refreshToken');
+
+		return response.json();
 	}
 
 	@HttpCode(HttpStatus.OK)
-	@UseGuards(JwtGuard)
 	@Post('refresh')
 	public async refresh(
 		@Req() request: Request,

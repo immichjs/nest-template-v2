@@ -1,16 +1,17 @@
 import { NotificationModule } from '@core/notification/notification.module';
 import { OtpModule } from '@core/otp/otp.module';
-import { RevokedTokensModule } from '@core/revoked-tokens/revoked-tokens.module';
 import { UsersModule } from '@core/users/users.module';
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtModule } from '@nestjs/jwt';
+import { Global, Module } from '@nestjs/common';
 import { SharedModule } from '@shared/shared.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { JobsModule } from 'src/jobs/jobs.module';
+import { JobsModule } from '@jobs/jobs.module';
+import { RedisModule } from '@core/redis/redis.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
 	imports: [
 		JwtModule.registerAsync({
@@ -21,17 +22,19 @@ import { JobsModule } from 'src/jobs/jobs.module';
 				secret: configService.get('jwt.secret'),
 				signOptions: {
 					expiresIn: '1h',
+					issuer: 'auth',
 				},
 			}),
 		}),
 		SharedModule,
 		OtpModule,
 		UsersModule,
-		RevokedTokensModule,
 		NotificationModule,
+		RedisModule,
 		JobsModule,
 	],
 	controllers: [AuthController],
 	providers: [AuthService, JwtStrategy],
+	exports: [JwtModule],
 })
 export class AuthModule {}
