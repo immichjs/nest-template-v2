@@ -1,8 +1,8 @@
+import { createKeyv } from '@keyv/redis';
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { RedisService } from './redis.service';
-import { redisStore } from 'cache-manager-redis-yet';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CacheModule, CacheStore } from '@nestjs/cache-manager';
+import { RedisService } from './redis.service';
 
 @Module({
 	imports: [
@@ -10,16 +10,15 @@ import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 			isGlobal: true,
 			imports: [ConfigModule],
 			inject: [ConfigService],
-			useFactory: async (configService: ConfigService) => {
-				const store = await redisStore({
-					socket: {
-						host: configService.get('redis.host'),
-						port: configService.get('redis.port'),
-					},
-				});
+			useFactory: (configService: ConfigService) => {
+				const port = configService.get<number>('redis.port');
+				const host = configService.get<string>('redis.host');
+				const username = configService.get<string>('redis.username');
+				const password = configService.get<string>('redis.password');
+				const connection = `redis://${username}:${password}@${host}:${port}`;
 
 				return {
-					store: store as unknown as CacheStore,
+					stores: [createKeyv(connection)],
 				};
 			},
 		}),
